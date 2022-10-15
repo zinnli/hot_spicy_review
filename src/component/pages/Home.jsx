@@ -5,13 +5,13 @@ import Btn from "../btn/Btn";
 import List from "../list/List";
 
 function Home() {
-     return (
-          <Layout>
-               <Header />
-               {/* <Btn />
-               <List /> */}
-          </Layout>
-     );
+  return (
+    <Layout>
+      <Header />
+      {/* <Btn /> */}
+      <List />
+    </Layout>
+  );
 }
 
 export default Home;
