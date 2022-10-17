@@ -1,25 +1,51 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toBeInTheDocument } from "@testing-library/jest-dom/dist/matchers";
 
 const initialState = {
-  //   inputs: [
-  //     { id: 1, title: "이가게", content: "여기 맵다", fire: "🔥", isDone: false },
-  //   ],
-
-  comments: [{ id: 1, content: "너무 매워여", isDone: false }],
+  hot: [{ id: 1, content: "너무 매워여", fire: "🔥", isDone: false }],
+  detail: [
+    {
+      id: 1,
+      title: "떡볶이집",
+      text: "죽을맛",
+      fire: "🔥",
+      img: "",
+      isDone: false,
+    },
+  ],
 };
 
-const commentSlice = createSlice({
-  name: "Comment", // 이 모듈의 이름
-  initialState, // 이 모듈의 초기상태 값
+const hotSlice = createSlice({
+  name: "hot",
+  initialState,
   reducers: {
-    // 이 모듈의 Reducer 로직
-    addComment: (state, action) => {
-      state.comments = [...state.comments, action.payload];
+    addHot: (state, action) => {
+      // console.log(state.hot);
+      console.log(action);
+      return { ...state, hot: [...state.hot, action.payload] };
+    },
+    deleteHot: (state, action) => {
+      state.hot = state.hot.filter((h) => h.id !== action.payload);
+    },
+    updateHot: (state, action) => {
+      state.hot = state.hot.map((com) => {
+        if (com.id === action.payload) {
+          return {
+            ...com,
+            isDone: !com.isDone,
+          };
+        } else {
+          return toBeInTheDocument;
+        }
+      });
+    },
+    addDetail: (state, action) => {
+      // console.log(state.hot);
+      console.log(action);
+      return { ...state, detail: [...state.detail, action.payload] };
     },
   },
 });
 
-// 액션크리에이터는 컴포넌트에서 사용하기 위해 export 하고
-export const { addComment } = commentSlice.actions;
-// reducer 는 configStore에 등록하기 위해 export default 합니다.
-export default commentSlice.reducer;
+export const { addHot, deleteHot, updateHot, addDetail } = hotSlice.actions;
+export default hotSlice.reducer;

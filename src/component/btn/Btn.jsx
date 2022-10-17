@@ -1,26 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 
-const Btn = () => {
-  const navigate = useNavigate();
+const Btn = (props) => {
+  const { label, onClick, disabled } = props;
   return (
-    <div>
-      <WriteButton onClick={() => navigate("hotform")}>
-        게시물 작성하기
-      </WriteButton>
-    </div>
+    <Button onClick={onClick} disabled={disabled}>
+      {label}
+    </Button>
   );
 };
 
 export default Btn;
 
-const WriteButton = styled.button`
-  width: 300px;
-  height: 50px;
-  border-radius: 20px;
-  border: 3px solid salmon;
-  margin-left: 40%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+const Button = styled.button`
+  width: 85px;
+  height: 42px;
+  font-size: 17px;
+  padding: 5px;
+  margin-left: 15px;
+  background-color: tomato;
+  border: none;
+  border-radius: 4px;
+  color: white;
 `;

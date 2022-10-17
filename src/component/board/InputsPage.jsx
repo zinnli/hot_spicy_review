@@ -1,62 +1,70 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { addComment } from "../../redux/modules/hotSlice";
+import Btn from "../btn/Btn";
 import nextId from "react-id-generator";
+import { useDispatch } from "react-redux";
+import Fire from "../fire/Fire";
+import styled from "styled-components";
+import { addDetail } from "../../redux/modules/hotSlice";
 
 const InputsPage = () => {
+  const id = nextId();
   const dispatch = useDispatch();
-  const dropdown = [
-    { id: null, value: "선택해주세요 " },
-    { id: "0001", value: "🔥" },
-    { id: "0002", value: "🔥🔥" },
-    { id: "0003", value: "🔥🔥🔥" },
-    { id: "0004", value: "🔥🔥🔥🔥" },
-    { id: "0005", value: "🔥🔥🔥🔥🔥" },
-  ];
-
-  const [selectDropValue, setSelectDropValue] = useState(["선택해주세요"]);
-
-  const dropdownHandeler = (e) => {
-    const { value } = e.target;
-    setSelectDropValue(dropdown.filter((drop) => drop.value === value)[0]);
-  };
-
-  const [inputs, setInputs] = useState({
+  const initialState = {
     id: 0,
     title: "",
-    content: "",
+    text: "",
+    fire: "",
+    img: "",
     isDone: false,
-  });
-  const { title, content } = inputs;
+  };
+  // const dropdown = [
+  //   { id: null, value: "선택해주세요 " },
+  //   { id: "0001", value: "🔥" },
+  //   { id: "0002", value: "🔥🔥" },
+  //   { id: "0003", value: "🔥🔥🔥" },
+  //   { id: "0004", value: "🔥🔥🔥🔥" },
+  //   { id: "0005", value: "🔥🔥🔥🔥🔥" },
+  // ];
+
+  // const [selectDropValue, setSelectDropValue] = useState(["선택해주세요"]);
+
+  // const dropdownHandeler = (e) => {
+  //   const { value } = e.target;
+  //   setSelectDropValue(dropdown.filter((drop) => drop.value === value)[0]);
+  // };
+
+  const [inputs, setInputs] = useState(initialState);
+
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
   };
 
-  // const onSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   if (inputs.title.length === 0 || inputs.content.length === 0) {
-  //     alert("내용을 넣어주세요!");
-  //     return;
-  //   }
-  //   dispatch(
-  //     addComment({
-  //       ...inputs,
-  //       id,
-  //     })
-  //   );
-  // };
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    if (inputs.content === "") {
+      alert("내용을 넣어주세요");
+      return;
+    }
 
+    dispatch(
+      addDetail({
+        ...inputs,
+        id,
+      })
+    );
+    setInputs("");
+  };
   return (
-    <PageContainer>
+    <PageContainer onSubmit={onSubmitHandler}>
       <InputsContainer>
         <InputBox>
           <div>가게명</div>
           <InputType
             type="text"
             name="title"
-            value={title}
+            value={inputs.title || ""}
+            key="id"
             onChange={onChangeHandler}
           ></InputType>
         </InputBox>
@@ -64,25 +72,32 @@ const InputsPage = () => {
           <div>상세내용</div>
           <TextareaType
             type="text"
-            name="content"
-            value={content}
+            name="text"
+            value={inputs.text || ""}
+            key="id"
             onChange={onChangeHandler}
           ></TextareaType>
         </InputBox>
         <InputBox>
           <div>불맛</div>
-          <select onChange={dropdownHandeler}>
+          <Fire changeFire={onChangeHandler} />
+          {/* <select onChange={dropdownHandeler}>
             {dropdown.map((drop) => {
               return <option key={drop.id}>{drop.value}</option>;
             })}
-          </select>
+          </select> */}
         </InputBox>
         <InputBox>
-          사진<input type="file" accept="image/*"></input>
+          사진
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onChangeHandler}
+          ></input>
         </InputBox>
       </InputsContainer>
       <ButtonContainer>
-        <div>버튼 가져오고</div>
+        <Btn label="기록" onClick={() => {}} />
       </ButtonContainer>
     </PageContainer>
   );

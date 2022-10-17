@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import nextId from "react-id-generator";
 import { useDispatch, useSelector } from "react-redux";
-import { addComment } from "../../redux/modules/hotSlice";
+import { addHot } from "./src/redux/modules/hotSlice";
 
 const Comment = () => {
   const id = nextId();
-  const comments = useSelector((state) => state.comments);
+  const hot = useSelector((state) => state.hot);
   const dispatch = useDispatch();
   const [content, setContent] = useState("");
 
   const onChangeHandler = (e) => {
     setContent(e.target.value);
   };
-  console.log(comments);
+  console.log(hot);
   console.log(content);
 
   const onSubmitHandler = (e) => {
@@ -23,7 +23,7 @@ const Comment = () => {
       return;
     }
     dispatch(
-      addComment({
+      addHot({
         id: id,
         content: content,
         isDone: false,
@@ -46,7 +46,7 @@ const Comment = () => {
           <button type="submit">입력</button>
         </InputContainer>
         <ListContainer>
-          {comments.map((com) => {
+          {hot.map((com) => {
             if (!com.isDone) {
               return (
                 <CmentListStyle key={com.id}>
