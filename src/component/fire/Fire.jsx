@@ -1,14 +1,18 @@
 import React from "react";
 
-function Fire() {
+const Fire = ({ changeFire }) => {
      return (
-          <select>
-               <option value="fireOne">🔥</option>
-               <option value="fireTwo">🔥🔥</option>
-               <option value="fireThree">🔥🔥🔥</option>
-               <option value="fireFour">🔥🔥🔥🔥</option>
-               <option value="fireFive">🔥🔥🔥🔥🔥</option>
+          <select name="fire" onChange={changeFire}>
+               <option value="none" hidden>
+                    맵기를 선택하세요
+               </option>
+               <option>🔥</option>
+               <option>🔥🔥</option>
+               <option>🔥🔥🔥</option>
+               <option>🔥🔥🔥🔥</option>
+               <option>🔥🔥🔥🔥🔥</option>
           </select>
      );
-}
+};
+
 export default Fire;

@@ -1,23 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
-const initialState = [{}];
+const initialState = [
+     {
+          id: 0,
+          restaurant: "현진마라탕",
+          fire: "별네개지롱",
+          info: "양도 많고 혜자예요 사장님 멋져요",
+     },
+];
 
-const counterSlice = createSlice({
-     name: "counter", // 이 모듈의 이름
-     initialState, // 이 모듈의 초기상태 값
+const hotSlice = createSlice({
+     name: "hot",
+     initialState,
      reducers: {
-          // 이 모듈의 Reducer 로직
-          addNumber: (state, action) => {
-               state.number = state.number + action.payload;
-          },
-
-          minusNumber: (state, action) => {
-               state.number = state.number - action.payload;
+          addHot: (state, action) => {
+               console.log(current(state));
+               return [...state, action.payload];
           },
      },
 });
 
-// 액션크리에이터는 컴포넌트에서 사용하기 위해 export 하고
-export const { addNumber, minusNumber } = counterSlice.actions;
-// reducer 는 configStore에 등록하기 위해 export default 합니다.
-export default counterSlice.reducer;
+export const { addHot } = hotSlice.actions;
+export default hotSlice.reducer;

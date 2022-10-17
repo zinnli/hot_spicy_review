@@ -2,18 +2,20 @@ import React from "react";
 import Btn from "../btn/Btn";
 import styled from "styled-components";
 
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 function DetailBoard() {
+     const Hots = useSelector((state) => state.hot);
+     const { id } = useParams();
+     const hot = Hots.filter((item) => item.id === Number(id));
      return (
           <STDetailBoard>
-               <img
-                    src="https://pixabay.com/get/g0c69efb0c96d89bdefe09a3a95a65fb9d4f25604cb878f6a0de8b02fe9c2d889c129b43d076caf6bd8060edf286b85482bcde45fd0048e372a72243f359e19c40bd7b8737024890bc190fc10b1d6d55f_1920.jpg"
-                    alt="img"
-               />
                <div className="detail-title">
-                    <p>가게명</p>
-                    <p>맵기 결과</p>
+                    <p>{hot[0].restaurant}</p>
+                    <p>{hot[0].fire}</p>
                </div>
-               <p className="detail-text">상세내용상세내용</p>
+               <p className="detail-text">{hot[0].info}</p>
                <STDetailBtn>
                     <Btn className="btn detail-edit-btn" />
                     <Btn className="btn detail-del-btn" />
@@ -32,11 +34,6 @@ const STDetailBoard = styled.div`
      height: 60%;
      width: 80%;
      padding: 15px;
-     img {
-          width: 80%;
-          height: 300px;
-          object-fit: cover;
-     }
      .detail-title {
           width: 80%;
           height: 80px;
@@ -62,11 +59,12 @@ const STDetailBoard = styled.div`
           display: flex;
           justify-content: flex-start;
           width: 80%;
+          min-height: 200px;
           height: auto;
           color: tomato;
           border: 3px solid tomato;
           font-size: 18px;
-          padding: 12px;
+          padding: 20px;
           margin: 10px 0;
      }
 `;
