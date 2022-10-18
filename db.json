@@ -1,0 +1,32 @@
+{
+  "hot": [
+    {
+      "id": 1,
+      "restaurant": "aa",
+      "info": "aa",
+      "fire": "🔥"
+    },
+    {
+      "id": 2,
+      "restaurant": "aa",
+      "info": "aa",
+      "fire": "🔥"
+    },
+    {
+      "id": 3,
+      "restaurant": "aa",
+      "info": "aa",
+      "fire": "🔥"
+    },
+    {
+      "id": 4
+    }
+  ],
+  "comments": [
+    {
+      "id": 0,
+      "comment": "내용",
+      "fire": "입력하세요"
+    }
+  ]
+}

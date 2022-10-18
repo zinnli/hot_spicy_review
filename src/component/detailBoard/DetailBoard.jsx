@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import Btn from "../btn/Btn";
 import styled from "styled-components";
+import { __getHot } from "../../redux/modules/hotSlice";
 
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function DetailBoard() {
-     const Hots = useSelector((state) => state.hot);
+     const Hots = useSelector((state) => state.hot.hot);
+
+     const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();
-     const hot = Hots.filter((item) => item.id === Number(id));
+
+     //console.log(Hots);
+
+     const dispatch = useDispatch();
+
+     useEffect(() => {
+          dispatch(__getHot());
+     }, [dispatch]);
+
+     if (isLoading) {
+          return <div>로딩 중....</div>;
+     }
+
+     if (error) {
+          return <div>{error.message}</div>;
+     }
+
      return (
           <STDetailBoard>
                <div className="detail-title">
-                    <p>{hot[0].restaurant}</p>
-                    <p>{hot[0].fire}</p>
+                    <p>{Hots[id]?.restaurant}</p>
+                    <p>{Hots[id]?.fire}</p>
                </div>
-               <p className="detail-text">{hot[0].info}</p>
+               <p className="detail-text">{Hots[id]?.info}</p>
                <STDetailBtn>
                     <Btn className="btn detail-edit-btn" />
                     <Btn className="btn detail-del-btn" />
