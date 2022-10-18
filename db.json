@@ -1,32 +1,29 @@
 {
-  "hot": [
-    {
-      "id": 1,
-      "restaurant": "aa",
-      "info": "aa",
-      "fire": "🔥"
-    },
-    {
-      "id": 2,
-      "restaurant": "aa",
-      "info": "aa",
-      "fire": "🔥"
-    },
-    {
-      "id": 3,
-      "restaurant": "aa",
-      "info": "aa",
-      "fire": "🔥"
-    },
-    {
-      "id": 4
-    }
-  ],
-  "comments": [
-    {
-      "id": 0,
-      "comment": "내용",
-      "fire": "입력하세요"
-    }
-  ]
+     "hot": [
+          {
+               "id": 1,
+               "restaurant": "테스트",
+               "info": "입니다",
+               "fire": "🔥"
+          },
+          {
+               "id": 3,
+               "restaurant": "ㅂㅂ",
+               "info": "ㅂㅂ",
+               "fire": "🔥"
+          },
+          {
+               "id": 4,
+               "restaurant": "ㅁㅁ",
+               "info": "ㅁㅁ",
+               "fire": "🔥🔥"
+          },
+          {
+               "id": 5,
+               "restaurant": "ㅂㅂ",
+               "info": "ㅂㅂ",
+               "fire": "🔥🔥🔥🔥"
+          }
+     ],
+     "comments": []
 }

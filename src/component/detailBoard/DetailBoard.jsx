@@ -2,24 +2,26 @@ import React, { useEffect } from "react";
 
 import Btn from "../btn/Btn";
 import styled from "styled-components";
-import { __getHot } from "../../redux/modules/hotSlice";
+import { __deleteHot, __detailHot } from "../../redux/modules/hotSlice";
 
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 function DetailBoard() {
-     const Hots = useSelector((state) => state.hot.hot);
+     const Hots = useSelector((state) => state.hot.detail);
 
      const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();
 
-     //console.log(Hots);
+     console.log(Hots);
 
      const dispatch = useDispatch();
 
      useEffect(() => {
-          dispatch(__getHot());
-     }, [dispatch]);
+          dispatch(__detailHot(id));
+     }, [dispatch, id]);
+
+     const onDelHandler = () => {};
 
      if (isLoading) {
           return <div>로딩 중....</div>;
@@ -32,13 +34,18 @@ function DetailBoard() {
      return (
           <STDetailBoard>
                <div className="detail-title">
-                    <p>{Hots[id]?.restaurant}</p>
-                    <p>{Hots[id]?.fire}</p>
+                    <p>{Hots.restaurant}</p>
+                    <p>{Hots.fire}</p>
                </div>
-               <p className="detail-text">{Hots[id]?.info}</p>
+               <p className="detail-text">{Hots.info}</p>
                <STDetailBtn>
-                    <Btn className="btn detail-edit-btn" />
-                    <Btn className="btn detail-del-btn" />
+                    <button className="btn detail-edit-btn">수정</button>
+                    <button
+                         onClick={() => onDelHandler()}
+                         className="btn detail-del-btn"
+                    >
+                         삭제
+                    </button>
                </STDetailBtn>
           </STDetailBoard>
      );

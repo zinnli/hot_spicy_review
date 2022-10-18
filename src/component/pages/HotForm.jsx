@@ -32,7 +32,9 @@ function HotForm() {
 
      const onSubmitInfoHandler = (e) => {
           e.preventDefault();
+          if (hot.restaurant === "" || hot.info === "") return;
           dispatch(__postHot({ ...hot }));
+          setHot(initialState);
           //axios.post("http://localhost:3001/hot", hot);
      };
 
