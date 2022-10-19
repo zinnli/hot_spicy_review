@@ -1,23 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosPocket } from "../../apis/pocketInstance";
+import axios from "axios";
 
-const initialState = [{}];
+const initialState = {
+  hot: [{ id: 1, content: "너무 매워여", fire: "🔥", isDone: false }],
+  hots: { id: "0", title: "", content: "", fire: "", img: "", isDone: false },
+  detail: [
+    {
+      id: 1,
+      title: "떡볶이집",
+      text: "죽을맛",
+      fire: "🔥",
+      img: "",
+      isDone: false,
+    },
+  ],
+};
+export const __getHot = createAsyncThunk(
+  "hot/getHot",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.get();
+    } catch (error) {}
+  }
+);
 
-const counterSlice = createSlice({
-     name: "counter", // 이 모듈의 이름
-     initialState, // 이 모듈의 초기상태 값
-     reducers: {
-          // 이 모듈의 Reducer 로직
-          addNumber: (state, action) => {
-               state.number = state.number + action.payload;
-          },
-
-          minusNumber: (state, action) => {
-               state.number = state.number - action.payload;
-          },
-     },
+const hotSlice = createSlice({
+  name: "hot",
+  initialState,
+  reducers: {
+    addHot: (state, action) => {
+      // console.log(state.hot);
+      console.log(action);
+      return { ...state, hot: [...state.hot, action.payload] };
+    },
+    deleteHot: (state, action) => {
+      state.hot = state.hot.filter((h) => h.id !== action.payload);
+    },
+    updateHot: (state, action) => {
+      state.hot = state.hot.map((com) => {
+        if (com.id === action.payload) {
+          return {
+            ...com,
+            isDone: !com.isDone,
+          };
+        } else {
+          return;
+        }
+      });
+    },
+    detailHot: (state, action) => {
+      state.hots = state.hot.find((hots) => {
+        return hots.id == action.payload;
+      });
+    },
+    addDetail: (state, action) => {
+      // console.log(state.hot);
+      console.log(action);
+      return { ...state, detail: [...state.detail, action.payload] };
+    },
+  },
 });
 
-// 액션크리에이터는 컴포넌트에서 사용하기 위해 export 하고
-export const { addNumber, minusNumber } = counterSlice.actions;
-// reducer 는 configStore에 등록하기 위해 export default 합니다.
-export default counterSlice.reducer;
+export const { addHot, deleteHot, updateHot, detailHot, addDetail } =
+  hotSlice.actions;
+export default hotSlice.reducer;
