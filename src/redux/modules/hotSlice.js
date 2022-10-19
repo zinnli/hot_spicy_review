@@ -4,7 +4,7 @@ import { axiosInstance } from "../../api/axiosInstance";
 
 const initialState = {
      hot: [],
-     detail: { id: 1, restaurant: "", info: "", fire: "🔥" },
+     detail: { id: 0, title: "", content: "", fire: "🔥" },
      // hot 배열안의 객체가 각각의 입력값이 도출되므로
      isLoading: false,
      error: null,
@@ -40,8 +40,8 @@ export const __postHot = createAsyncThunk(
      "hot/postHot",
      async (payload, thunkAPI) => {
           try {
-               const data = await axiosInstance.post("/hot", payload);
-               return thunkAPI.fulfillWithValue(data.data);
+               const { data } = await axiosInstance.post("/hot", payload);
+               return thunkAPI.fulfillWithValue(data);
           } catch (error) {
                return thunkAPI.rejectWithValue(error);
           }
@@ -52,7 +52,7 @@ export const __deleteHot = createAsyncThunk(
      "hot/deleteHot",
      async (payload, thunkAPI) => {
           try {
-               const data = await axiosInstance.delete("/hot", payload);
+               const data = await axiosInstance.delete(`/hot/${payload}`);
                return thunkAPI.fulfillWithValue(data.data);
           } catch (error) {
                return thunkAPI.rejectWithValue(error);
@@ -101,20 +101,20 @@ const hotSlice = createSlice({
                state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
                state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
           },
-          //delete
-          [__deleteHot.pending]: (state) => {
-               state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
-          },
-          [__deleteHot.fulfilled]: (state, action) => {
-               state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
-               state.hot = action.payload; // Store에 있는 hot에 서버에서 가져온 hot을 넣습니다.
-          },
-          [__deleteHot.rejected]: (state, action) => {
-               state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
-               state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
-          },
+          // //delete
+          // [__deleteHot.pending]: (state) => {
+          //      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+          // },
+          // [__deleteHot.fulfilled]: (state, action) => {
+          //      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+          //      state.hot = action.payload; // Store에 있는 hot에 서버에서 가져온 hot을 넣습니다.
+          // },
+          // [__deleteHot.rejected]: (state, action) => {
+          //      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+          //      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+          // },
      },
 });
 
-export const { addHot } = hotSlice.actions;
+export const {} = hotSlice.actions;
 export default hotSlice.reducer;

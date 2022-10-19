@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Btn from "../btn/Btn";
 import styled from "styled-components";
@@ -9,11 +9,17 @@ import { useSelector, useDispatch } from "react-redux";
 
 function DetailBoard() {
      const Hots = useSelector((state) => state.hot.detail);
-
+     const initialState = {
+          id: 0,
+          title: "",
+          content: "",
+          fire: "",
+     };
+     const [hot, setHot] = useState(initialState);
      const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();
 
-     console.log(Hots);
+     //console.log(Hots);
 
      const dispatch = useDispatch();
 
@@ -21,7 +27,10 @@ function DetailBoard() {
           dispatch(__detailHot(id));
      }, [dispatch, id]);
 
-     const onDelHandler = () => {};
+     const onDelHandler = () => {
+          dispatch(__deleteHot(Hots.id));
+          console.log(Hots.id);
+     };
 
      if (isLoading) {
           return <div>로딩 중....</div>;
@@ -34,18 +43,21 @@ function DetailBoard() {
      return (
           <STDetailBoard>
                <div className="detail-title">
-                    <p>{Hots.restaurant}</p>
+                    <p>{Hots.title}</p>
                     <p>{Hots.fire}</p>
                </div>
-               <p className="detail-text">{Hots.info}</p>
+               <p className="detail-text">{Hots.content}</p>
                <STDetailBtn>
-                    <button className="btn detail-edit-btn">수정</button>
-                    <button
-                         onClick={() => onDelHandler()}
-                         className="btn detail-del-btn"
-                    >
-                         삭제
-                    </button>
+                    <Btn
+                         label="수정"
+                         className="btn detail-edit-btn"
+                         onClick={() => {}}
+                    />
+                    <Btn
+                         label="삭제"
+                         className="btn detail-edit-btn"
+                         onClick={() => onDelHandler(hot.id)}
+                    />
                </STDetailBtn>
           </STDetailBoard>
      );
