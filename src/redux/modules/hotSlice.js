@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { toBeInTheDocument } from "@testing-library/jest-dom/dist/matchers";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosPocket } from "../../apis/pocketInstance";
+import axios from "axios";
 
 const initialState = {
   hot: [{ id: 1, content: "너무 매워여", fire: "🔥", isDone: false }],
+  hots: { id: "0", title: "", content: "", fire: "", img: "", isDone: false },
   detail: [
     {
       id: 1,
@@ -14,6 +16,14 @@ const initialState = {
     },
   ],
 };
+export const __getHot = createAsyncThunk(
+  "hot/getHot",
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.get();
+    } catch (error) {}
+  }
+);
 
 const hotSlice = createSlice({
   name: "hot",
@@ -35,8 +45,13 @@ const hotSlice = createSlice({
             isDone: !com.isDone,
           };
         } else {
-          return toBeInTheDocument;
+          return;
         }
+      });
+    },
+    detailHot: (state, action) => {
+      state.hots = state.hot.find((hots) => {
+        return hots.id == action.payload;
       });
     },
     addDetail: (state, action) => {
@@ -47,5 +62,6 @@ const hotSlice = createSlice({
   },
 });
 
-export const { addHot, deleteHot, updateHot, addDetail } = hotSlice.actions;
+export const { addHot, deleteHot, updateHot, detailHot, addDetail } =
+  hotSlice.actions;
 export default hotSlice.reducer;

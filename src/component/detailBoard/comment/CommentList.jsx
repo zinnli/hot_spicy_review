@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { axiosHot } from "../../../apis/hotInstance";
 import AddComment from "./AddComment";
 import EditComment from "../editDetail/EditDetail";
-import { useSelector } from "react-redux";
-
-// import DeleteComment from "./DeleteComment";
-// import EditComment from "./EditComment";
 import styled from "styled-components";
-// import { deleteHot } from "../../../redux/modules/hotSlice";
 import DeleteComment from "./DeleteComment";
 
-function CommentList({ onDeleteHandler }) {
-  const hot = useSelector((state) => state.hot);
-  console.log(hot);
+function CommentList() {
+  const [comments, setComments] = useState(null);
+  const fetchAll = async () => {
+    const { data } = await axiosHot.get("comments");
+    setComments(data);
+  };
+
+  useEffect(() => [fetchAll()], []);
   return (
     <STCommentList>
       <AddComment />
       <div className="comment-list">
-        {hot.map((com) => {
+        {comments?.map((com) => {
           if (!com.isDone) {
             return (
               <div key={com.id}>
@@ -55,7 +56,6 @@ const STCommentList = styled.div`
     height: 350px;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
     align-items: left;
     font-size: 15px;
     border: 3px solid tomato;

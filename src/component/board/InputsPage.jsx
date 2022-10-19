@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Btn from "../btn/Btn";
 import nextId from "react-id-generator";
 import { useDispatch } from "react-redux";
 import Fire from "../fire/Fire";
 import styled from "styled-components";
 import { addDetail } from "../../redux/modules/hotSlice";
+import { axiosHot } from "../../apis/hotInstance";
+import axios from "axios";
 
 const InputsPage = () => {
   const id = nextId();
@@ -34,15 +36,14 @@ const InputsPage = () => {
   // };
 
   const [inputs, setInputs] = useState(initialState);
-
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
+  const [posts, setPosts] = useState(null);
+  const fetchAll = async () => {
+    const { data } = await axiosHot.get("posts");
+    setPosts(data);
   };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    if (inputs.content === "") {
+  const onSubmitHandler = (inputs) => {
+    axios.post("http://localhost:3001/posts", inputs);
+    if (inputs.title === "" || inputs.text === "") {
       alert("내용을 넣어주세요");
       return;
     }
@@ -55,8 +56,36 @@ const InputsPage = () => {
     );
     setInputs("");
   };
+  useEffect(() => [fetchAll()], []);
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
+
+  // const onSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   if (inputs.title === "" || inputs.text === "") {
+  //     alert("내용을 넣어주세요");
+  //     return;
+  //   }
+
+  //   dispatch(
+  //     addDetail({
+  //       ...inputs,
+  //       id,
+  //     })
+  //   );
+  //   setInputs("");
+  // };
+  console.log(posts);
   return (
-    <PageContainer onSubmit={onSubmitHandler}>
+    <PageContainer
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmitHandler(inputs);
+      }}
+    >
       <InputsContainer>
         <InputBox>
           <div>가게명</div>
@@ -74,7 +103,7 @@ const InputsPage = () => {
             type="text"
             name="text"
             value={inputs.text || ""}
-            key="id"
+            // key="id"
             onChange={onChangeHandler}
           ></TextareaType>
         </InputBox>
@@ -92,6 +121,7 @@ const InputsPage = () => {
           <input
             type="file"
             accept="image/*"
+            name="img"
             onChange={onChangeHandler}
           ></input>
         </InputBox>
@@ -105,7 +135,7 @@ const InputsPage = () => {
 
 export default InputsPage;
 
-const PageContainer = styled.div`
+const PageContainer = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,36 +1,70 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { axiosHot } from "../../apis/hotInstance";
+import { Link } from "react-router-dom";
+// import { axiosPocket } from "../../apis/pocketInstance";
 
 const MainPage = () => {
+  // const [post, setPost] = useState({
+  //   id: 0,
+  //   title: "",
+  //   fire: "",
+  //   img: "readURL",
+  // });
+  const [posts, setPosts] = useState(null);
+  // axiosPocket.get();
+  // console.log(axiosPocket.get().then((item) => console.log(item)));
   const navigate = useNavigate();
+
+  const fetchAll = async () => {
+    const { data } = await axiosHot.get("posts");
+    setPosts(data);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  console.log(posts);
   return (
     <div>
       <WriteButton onClick={() => navigate("hotform")}>
         게시물 작성하기
       </WriteButton>
-      <ListCardBox>
-        <ListCardImage
-          onClick={() => {
-            navigate("hot/:id");
-          }}
-        >
-          사진이 뜰겁니다
-        </ListCardImage>
-        <ListCardFire>제 점수는요</ListCardFire>
-        <ListCardTitle>제목은 이겁니다</ListCardTitle>
-      </ListCardBox>
+      <ListContainer>
+        {posts?.map((post) => (
+          <ListCardBox key={post.id}>
+            <ListCardImage>
+              <Link to={`hot/${post.id}`} key={post.id}>
+                {post.img}
+              </Link>
+            </ListCardImage>
+            <ListCardFire>{post.fire}</ListCardFire>
+            <ListCardTitle>{post.title}</ListCardTitle>
+          </ListCardBox>
+        ))}
+      </ListContainer>
     </div>
   );
 };
 
 export default MainPage;
+const ListContainer = styled.form`
+  width: 100%;
+  max-width: 1200px;
+  height: 800px;
+  display: flex;
+  flex-direction: row;
+`;
 
 const ListCardBox = styled.div`
   width: 380px;
   height: 420px;
-  margin-right: auto;
-  margin-left: auto;
+  /* margin-right: auto;
+  margin-left: auto; */
   display: flex;
   flex-direction: column;
   justify-content: center;

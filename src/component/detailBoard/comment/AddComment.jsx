@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Btn from "../../btn/Btn";
 import nextId from "react-id-generator";
 import { useDispatch } from "react-redux";
 import Fire from "../../fire/Fire";
 import styled from "styled-components";
+import { axiosHot } from "../../../apis/hotInstance";
 import { addHot } from "../../../redux/modules/hotSlice";
+import axios from "axios";
 
 function AddComment(onDeleteHandler) {
   const id = nextId();
@@ -16,14 +18,17 @@ function AddComment(onDeleteHandler) {
     isDone: false,
   };
   const [inputs, setInputs] = useState(initialState);
-
+  const [comments, setComments] = useState(null);
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
   };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
+  const fetchAll = async () => {
+    const { data } = await axiosHot.get("comments");
+    setComments(data);
+  };
+  const onSubmitHandler = (inputs) => {
+    axios.post("http://localhost:3001/comments", inputs);
     if (inputs.content === "") {
       alert("내용을 넣어주세요");
       return;
@@ -37,9 +42,16 @@ function AddComment(onDeleteHandler) {
     );
     setInputs("");
   };
+  useEffect(() => [fetchAll()], []);
 
+  console.log(comments);
   return (
-    <STAddComment onSubmit={onSubmitHandler}>
+    <STAddComment
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmitHandler(inputs);
+      }}
+    >
       <form>
         <InputStyle
           type="text"

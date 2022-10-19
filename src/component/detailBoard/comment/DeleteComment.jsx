@@ -1,21 +1,15 @@
 import React from "react";
 import Btn from "../../btn/Btn";
-import { useDispatch } from "react-redux";
-import { deleteHot } from "../../../redux/modules/hotSlice";
+import axios from "axios";
 
 function DeleteComment({ com }) {
-  const dispatch = useDispatch();
   const onDeleteHandler = (id) => {
-    dispatch(deleteHot(id));
+    axios.delete(`http://localhost:3001/comments/${id}`);
   };
 
   return (
     <div>
-      <Btn
-        label="삭제"
-        onDeleteHandler={onDeleteHandler}
-        onClick={() => onDeleteHandler(com.id)}
-      />
+      <Btn label="삭제" type="button" onClick={() => onDeleteHandler(com.id)} />
     </div>
   );
 }
