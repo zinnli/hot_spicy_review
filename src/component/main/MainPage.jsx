@@ -1,34 +1,27 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-//import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../../api/axiosInstance";
 import { Link } from "react-router-dom";
+import { __getHot } from "../../redux/modules/hotSlice";
 // import { axiosPocket } from "../../apis/pocketInstance";
 
 const MainPage = () => {
-     // const [post, setPost] = useState({
-     //   id: 0,
-     //   title: "",
-     //   fire: "",
-     //   img: "readURL",
-     // });
-     const [hot, setHot] = useState(null);
-     // axiosPocket.get();
-     // console.log(axiosPocket.get().then((item) => console.log(item)));
      const navigate = useNavigate();
 
-     const fetchAll = async () => {
-          const { data } = await axiosInstance.get("/hot");
-          setHot(data);
-          console.log(data);
-     };
+     const dispatch = useDispatch();
 
-     useEffect(() => {
-          fetchAll();
-     }, []);
+     const hot = useSelector((state) => state.hot.hot);
 
      console.log(hot);
+
+     useEffect(() => {
+          dispatch(__getHot());
+     }, [dispatch]);
+     // 에러를 추가하고 싶다면,, useEffect를 활용하여 오류인지 아닌지 사용해서 할 수 있음
+     // useSelector에서 error를 가져와서 사용할 수 있음(에러페이지로 넘김/보여주는..)
+
      return (
           <STMainPage>
                <WriteButton onClick={() => navigate("hotform")}>

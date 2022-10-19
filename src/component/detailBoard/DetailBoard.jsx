@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import Btn from "../btn/Btn";
 import styled from "styled-components";
-import { __deleteHot, __detailHot } from "../../redux/modules/hotSlice";
+import {
+     __deleteHot,
+     __editHot,
+     __detailHot,
+} from "../../redux/modules/hotSlice";
 
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function DetailBoard() {
      const Hots = useSelector((state) => state.hot.detail);
@@ -16,20 +21,30 @@ function DetailBoard() {
           fire: "",
      };
      const [hot, setHot] = useState(initialState);
+
      const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();
-
+     const navigate = useNavigate();
      //console.log(Hots);
 
      const dispatch = useDispatch();
+
+     const onDelHandler = () => {
+          dispatch(__deleteHot(Hots.id));
+          //console.log(Hots.id);
+          navigate("/", { replace: true });
+          // useNavigate - replace 사용하기-- 오류처리 페이지로 이동
+          // isError : 오류 판별 (true 일 때 오류페이지로 이동)
+     };
 
      useEffect(() => {
           dispatch(__detailHot(id));
      }, [dispatch, id]);
 
-     const onDelHandler = () => {
-          dispatch(__deleteHot(Hots.id));
-          console.log(Hots.id);
+     const onEditHandler = () => {
+          dispatch(__editHot(Hots.id));
+
+          // window.location.replace("/");
      };
 
      if (isLoading) {
@@ -46,12 +61,15 @@ function DetailBoard() {
                     <p>{Hots.title}</p>
                     <p>{Hots.fire}</p>
                </div>
+
                <p className="detail-text">{Hots.content}</p>
                <STDetailBtn>
                     <Btn
                          label="수정"
                          className="btn detail-edit-btn"
-                         onClick={() => {}}
+                         onClick={() => {
+                              onEditHandler();
+                         }}
                     />
                     <Btn
                          label="삭제"

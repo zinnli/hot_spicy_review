@@ -11,8 +11,8 @@ const InputsPage = () => {
      const dispatch = useDispatch();
      const initialState = {
           id: 0,
-          restaurant: "",
-          info: "",
+          title: "",
+          content: "",
           fire: "",
      };
      const [hot, setHot] = useState(initialState);
@@ -24,21 +24,21 @@ const InputsPage = () => {
 
      const onSubmitInfoHandler = (e) => {
           e.preventDefault();
-          if (hot.title === "" || hot.content === "") {
+          if (hot.title.trim() === "" || hot.content.trim() === "") {
                alert("내용을 넣어주세요");
                return;
           }
           dispatch(__postHot({ ...hot }));
           setHot(initialState);
-          return;
+          window.location.replace("/");
      };
 
-     useEffect(() => {
-          dispatch(__postHot());
-     }, [dispatch]);
+     // useEffect(() => {
+     //      dispatch(__postHot());
+     // }, [dispatch]);
 
      return (
-          <PageContainer onSubmit={() => onSubmitInfoHandler}>
+          <PageContainer onSubmit={onSubmitInfoHandler}>
                <InputsContainer>
                     <InputBox>
                          <div>가게명</div>
