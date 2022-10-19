@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import Btn from "../btn/Btn";
 import styled from "styled-components";
+import CommentList from "./comment/CommentList";
 import {
      __deleteHot,
      __editHot,
@@ -42,7 +45,7 @@ function DetailBoard() {
      }, [dispatch, id]);
 
      const onEditHandler = () => {
-          dispatch(__editHot(Hots.id));
+          dispatch(__editHot(Hots));
 
           // window.location.replace("/");
      };
@@ -56,28 +59,30 @@ function DetailBoard() {
      }
 
      return (
-          <STDetailBoard>
-               <div className="detail-title">
-                    <p>{Hots.title}</p>
-                    <p>{Hots.fire}</p>
-               </div>
-
-               <p className="detail-text">{Hots.content}</p>
-               <STDetailBtn>
-                    <Btn
-                         label="수정"
-                         className="btn detail-edit-btn"
-                         onClick={() => {
-                              onEditHandler();
-                         }}
-                    />
-                    <Btn
-                         label="삭제"
-                         className="btn detail-edit-btn"
-                         onClick={() => onDelHandler(hot.id)}
-                    />
-               </STDetailBtn>
-          </STDetailBoard>
+          <>
+               <STDetailBoard>
+                    <div className="detail-title">
+                         <p>{Hots.title}</p>
+                         <p>{Hots.fire}</p>
+                    </div>
+                    <p className="detail-text">{Hots.content}</p>
+                    <STDetailBtn>
+                         <Btn
+                              label="수정"
+                              className="btn detail-edit-btn"
+                              onClick={() => {
+                                   onEditHandler();
+                              }}
+                         />
+                         <Btn
+                              label="삭제"
+                              className="btn detail-edit-btn"
+                              onClick={() => onDelHandler(hot.id)}
+                         />
+                    </STDetailBtn>
+               </STDetailBoard>
+               <CommentList postId={id} />
+          </>
      );
 }
 

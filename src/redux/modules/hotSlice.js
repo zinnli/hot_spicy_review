@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios"; // 비동기 처리 ==> export 따로 빼서 작업(action 생성자 따로 호출)
+//import axios from "axios"; // 비동기 처리 ==> export 따로 빼서 작업(action 생성자 따로 호출)
 import { axiosInstance } from "../../api/axiosInstance";
 
 const initialState = {
@@ -144,5 +144,5 @@ const hotSlice = createSlice({
      },
 });
 
-export const {} = hotSlice.actions;
+//export const {} = hotSlice.actions;
 export default hotSlice.reducer;

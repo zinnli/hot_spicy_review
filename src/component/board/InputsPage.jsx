@@ -29,13 +29,8 @@ const InputsPage = () => {
                return;
           }
           dispatch(__postHot({ ...hot }));
-          setHot(initialState);
           window.location.replace("/");
      };
-
-     // useEffect(() => {
-     //      dispatch(__postHot());
-     // }, [dispatch]);
 
      return (
           <PageContainer onSubmit={onSubmitInfoHandler}>
