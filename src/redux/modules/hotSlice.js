@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import axios from "axios"; // 비동기 처리 ==> export 따로 빼서 작업(action 생성자 따로 호출)
+//import axios from "axios"; // 비동기 처리 ==> export 따로 빼서 작업(action 생성자 따로 호출)
 import { axiosInstance } from "../../api/axiosInstance";
 
 const initialState = {
@@ -14,7 +14,8 @@ export const __getHot = createAsyncThunk(
   "hot/getHot",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await axiosInstance.get("/hot"); // 이구문에서 오류나면 error로 넘어감
+      const { data } = await axiosInstance.get("/hot");
+      // 이구문에서 오류나면 error로 넘어감
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -28,7 +29,7 @@ export const __detailHot = createAsyncThunk(
     //async 함수 맨앞 /await비동기처리되는구문
     try {
       const { data } = await axiosInstance.get(`/hot/${payload}`);
-      console.log(data);
+      //console.log(data);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -51,7 +52,6 @@ export const __postHot = createAsyncThunk(
 export const __deleteHot = createAsyncThunk(
   "hot/deleteHot",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
       const { data } = await axiosInstance.delete(`/hot/${payload}`);
       return thunkAPI.fulfillWithValue(data);
@@ -63,10 +63,10 @@ export const __deleteHot = createAsyncThunk(
 export const __editHot = createAsyncThunk(
   "hot/editHot",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
-      const { data } = await axiosInstance.patch(`/hot/${payload.id}`);
-      return thunkAPI.fulfillWithValue(payload);
+      console.log(payload);
+      const { data } = await axiosInstance.patch(`/hot/${payload.id}`, payload);
+      return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -121,6 +121,7 @@ const hotSlice = createSlice({
       state.isLoading = true;
     },
     [__deleteHot.fulfilled]: (state, action) => {
+      //console.log(state.hot.hot);
       state.isLoading = false;
     },
     [__deleteHot.rejected]: (state, action) => {
@@ -133,6 +134,7 @@ const hotSlice = createSlice({
       state.isLoading = true;
     },
     [__editHot.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.isLoading = false;
       state.hot = [...state.hot].map((item) => {
         if (action.payload.id === item.id) {
@@ -148,5 +150,5 @@ const hotSlice = createSlice({
   },
 });
 
-export const {} = hotSlice.actions;
+//export const {} = hotSlice.actions;
 export default hotSlice.reducer;

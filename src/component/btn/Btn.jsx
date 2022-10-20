@@ -13,10 +13,10 @@ const Btn = (props) => {
 export default Btn;
 
 const Button = styled.button`
-  width: 85px;
-  height: 42px;
+  width: auto;
+  height: auto;
   font-size: 17px;
-  padding: 5px;
+  padding: 5px 10px;
   margin-left: 15px;
   background-color: tomato;
   border: none;

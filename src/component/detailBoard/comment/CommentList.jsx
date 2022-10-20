@@ -1,34 +1,16 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 import AddComment from "./AddComment";
 import Btn from "../../btn/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  __deleteCom,
-  __getCom,
-  __editCom,
-} from "../../../redux/modules/commentSlice";
+//import { axiosInstance } from "../../../api/axiosInstance";
+import { __deleteCom, __getCom } from "../../../redux/modules/commentSlice";
 
 function CommentList({ postId }) {
   const dispatch = useDispatch();
   const comments = useSelector((state) => state.comments.comments);
   const { isLoading, error } = useSelector((state) => state.comments);
-
-  const initialState = {
-    id: 0,
-    comment: "",
-    fire: "",
-    postId: 0,
-    isDone: false,
-  };
-
-  const [comM, setComment] = useState(initialState);
-  const [editC, setEditC] = useState(false);
-  const { id } = useParams();
-  // const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(__getCom(postId));
@@ -36,7 +18,8 @@ function CommentList({ postId }) {
 
   const onDelHandler = (id) => {
     dispatch(__deleteCom(id));
-    // navigate("/", { replace: true });
+    alert("삭제완료");
+    dispatch(__getCom(postId));
   };
 
   if (isLoading) {
@@ -55,12 +38,8 @@ function CommentList({ postId }) {
           return (
             <div key={com.id}>
               <div className="comment-text">
-                <p key={com.id} comment={com.comment}>
-                  {com.comment}
-                </p>
-                <p key={com.id} fire={com.fire}>
-                  {com.fire}
-                </p>
+                <p>{com.comment}</p>
+                <p>{com.fire}</p>
               </div>
 
               <div className="comment-btn">
@@ -69,7 +48,7 @@ function CommentList({ postId }) {
                   type="button"
                   onClick={() => onDelHandler(com.id)}
                 />
-                <Btn label="수정" onClick={() => {}} />
+                {/* <Btn label="수정" onClick={onEditHandler} /> */}
               </div>
             </div>
           );
@@ -91,25 +70,38 @@ const STCommentList = styled.div`
   padding: 30px;
   .comment-list {
     width: 80%;
-    height: 300px;
+    height: 100%;
     display: flex;
-    /* justify-content: space-between; */
-    /* align-items: center; */
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     font-size: 15px;
     border: 3px solid tomato;
-    padding: 5px 10px;
+    padding: 20px;
+    gap: 20px;
     div {
       width: 100%;
-      background-color: lightgray;
-      margin-bottom: 5px;
       display: flex;
-      /* justify-content: space-between; */
+      justify-content: space-between;
       align-items: center;
     }
     .comment-text {
-      width: 1700px;
+      width: 75%;
       height: auto;
+      border: 2px solid tomato;
+      border-radius: 5px;
+      padding: 10px 15px;
+      color: orangered;
+      p:last-child {
+        width: 20%;
+        text-align: center;
+      }
+    }
+    .comment-btn {
+      width: 20%;
+      height: auto;
+      display: flex;
+      justify-content: flex-end;
     }
   }
 `;

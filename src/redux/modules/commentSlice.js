@@ -39,8 +39,7 @@ export const __detailCom = createAsyncThunk(
   async (payload, thunkAPI) => {
     //async 함수 맨앞 /await비동기처리되는구문
     try {
-      const data = await axiosInstance.get(`/comments/${payload}`);
-      console.log(data);
+      const { data } = await axiosInstance.get(`/comments/${payload}`);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -68,9 +67,6 @@ export const __deleteCom = createAsyncThunk(
     try {
       console.log("확인", payload);
       const { data } = await axiosInstance.delete(`/comments/${payload}`);
-      if (window.confirm("정말로 삭제하시겠습니까?")) {
-        window.location.reload();
-      }
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -150,7 +146,12 @@ const commentSlice = createSlice({
     },
     [__editCom.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.comments = action.payload;
+      state.comments = [...state.comments].map((item) => {
+        if (action.payload.id === item.id) {
+          return action.payload;
+        }
+        return item;
+      });
     },
     [__editCom.rejected]: (state, action) => {
       state.isLoading = false;

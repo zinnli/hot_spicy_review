@@ -1,38 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import Btn from "../btn/Btn";
 import styled from "styled-components";
-import {
-  __deleteHot,
-  __editHot,
-  __detailHot,
-} from "../../redux/modules/hotSlice";
-
-import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import CommentList from "./comment/CommentList";
+import { __deleteHot, __detailHot } from "../../redux/modules/hotSlice";
+
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 function DetailBoard() {
   const Hots = useSelector((state) => state.hot.detail);
-  const initialState = {
-    id: 0,
-    title: "",
-    content: "",
-    fire: "",
-  };
-  const [hot, setHot] = useState(initialState);
+  //detail 쓰는 이유
+  const comments = useSelector((state) => state.comments.comments);
 
   const { isLoading, error } = useSelector((state) => state.hot);
   const { id } = useParams();
   const navigate = useNavigate();
-  //console.log(Hots);
-
+  console.log(Hots);
+  console.log(comments);
   const dispatch = useDispatch();
 
   const onDelHandler = () => {
-    console.log(Hots);
-    dispatch(__deleteHot(Hots.id));
+    dispatch(__deleteHot(id));
     //console.log(Hots.id);
     navigate("/", { replace: true });
     // useNavigate - replace 사용하기-- 오류처리 페이지로 이동
@@ -44,9 +33,7 @@ function DetailBoard() {
   }, [dispatch, id]);
 
   const onEditHandler = () => {
-    dispatch(__editHot(Hots.id));
-    navigate("edit/:id", { replace: true });
-
+    navigate(`/hot/edit/${id}`);
     // window.location.replace("/");
   };
 
@@ -59,20 +46,13 @@ function DetailBoard() {
   }
 
   return (
-    <div>
+    <>
       <STDetailBoard>
         <div className="detail-title">
-          <p key={Hots.id} title={Hots.title}>
-            {Hots.title}
-          </p>
-          <p key={Hots.id} fire={Hots.fire}>
-            {Hots.fire}
-          </p>
+          <p>{Hots.title}</p>
+          <p>{Hots.fire}</p>
         </div>
-
-        <p className="detail-text" key={Hots.id} content={Hots.content}>
-          {Hots.content}
-        </p>
+        <p className="detail-text">{Hots.content}</p>
         <STDetailBtn>
           <Btn
             label="수정"
@@ -82,12 +62,13 @@ function DetailBoard() {
           <Btn
             label="삭제"
             className="btn detail-edit-btn"
-            onClick={() => onDelHandler(hot.id)}
+            onClick={onDelHandler}
           />
+          {/* arrow fun 쓸 때 -- 사용법은 많은데.,,!!! 주로~!!! map돌릴때 */}
         </STDetailBtn>
       </STDetailBoard>
       <CommentList postId={id} />
-    </div>
+    </>
   );
 }
 
