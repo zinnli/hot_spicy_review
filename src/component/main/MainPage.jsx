@@ -13,8 +13,6 @@ const MainPage = () => {
 
      const hot = useSelector((state) => state.hot.hot);
 
-     //console.log(hot);
-
      useEffect(() => {
           dispatch(__getHot());
      }, [dispatch]);
