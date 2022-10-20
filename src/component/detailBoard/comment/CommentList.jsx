@@ -49,11 +49,6 @@ function CommentList({ postId }) {
                                                   onDelHandler(com.id)
                                              }
                                         />
-                                        <Btn
-                                             label="수정"
-                                             key={com.id}
-                                             com={com}
-                                        />
                                    </div>
                               </div>
                          );
