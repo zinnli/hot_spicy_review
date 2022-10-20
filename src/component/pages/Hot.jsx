@@ -1,15 +1,13 @@
 import React from "react";
 import Layout from "../layout/Layout";
 import Header from "../header/Header";
-import Detail from "../detail/Detail";
-import Comment from "../comment/Comment";
+import DetailBoard from "../detailBoard/DetailBoard";
 
 function Hot() {
      return (
           <Layout>
                <Header />
-               <Detail />
-               <Comment />
+               <DetailBoard />
           </Layout>
      );
 }
