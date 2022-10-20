@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-//import { axiosInstance } from "../../api/axiosInstance";
+
 import { Link } from "react-router-dom";
 import { __getHot } from "../../redux/modules/hotSlice";
 
@@ -13,7 +13,7 @@ const MainPage = () => {
 
      const hot = useSelector((state) => state.hot.hot);
 
-     console.log(hot);
+     //console.log(hot);
 
      useEffect(() => {
           dispatch(__getHot());

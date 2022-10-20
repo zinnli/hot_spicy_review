@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import AddComment from "./AddComment";
 import Btn from "../../btn/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import styled from "styled-components";
-//import { axiosInstance } from "../../../api/axiosInstance";
 import { __deleteCom, __getCom } from "../../../redux/modules/commentSlice";
 
 function CommentList({ postId }) {
