@@ -10,7 +10,6 @@ function Hot() {
     <Layout>
       <Header />
       <DetailBoard />
-      <CommentList />
     </Layout>
   );
 }

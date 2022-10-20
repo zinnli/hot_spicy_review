@@ -1,72 +1,97 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Btn from "../btn/Btn";
-import { axiosHot } from "../../apis/hotInstance";
-import { useParams } from "react-router-dom";
-import { detailHot } from "../../redux/modules/hotSlice";
-import { useDispatch } from "react-redux";
-// import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 
-function Detail() {
-  const { id } = useParams();
-  console.log({ id });
-  const dispatch = useDispatch();
-  const [posts, setPosts] = useState({
-    id: "0",
+import Btn from "../btn/Btn";
+import styled from "styled-components";
+import {
+  __deleteHot,
+  __editHot,
+  __detailHot,
+} from "../../redux/modules/hotSlice";
+
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import CommentList from "./comment/CommentList";
+
+function DetailBoard() {
+  const Hots = useSelector((state) => state.hot.detail);
+  const initialState = {
+    id: 0,
     title: "",
     content: "",
     fire: "",
-    img: "",
-    isDone: false,
-  });
-
-  const fetchpost = async () => {
-    const { data } = await axiosHot.get("posts");
-    setPosts(...data, dispatch(detailHot(id)));
-    console.log(data);
   };
-  // const post = posts.find((post) => {
-  //   return post.id;
-  // });
+  const [hot, setHot] = useState(initialState);
+
+  const { isLoading, error } = useSelector((state) => state.hot);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  //console.log(Hots);
+
+  const dispatch = useDispatch();
+
+  const onDelHandler = () => {
+    console.log(Hots);
+    dispatch(__deleteHot(Hots.id));
+    //console.log(Hots.id);
+    navigate("/", { replace: true });
+    // useNavigate - replace 사용하기-- 오류처리 페이지로 이동
+    // isError : 오류 판별 (true 일 때 오류페이지로 이동)
+  };
+
   useEffect(() => {
-    fetchpost();
-  }, []);
-  console.log(posts);
-  // console.log(post);
+    dispatch(__detailHot(id));
+  }, [dispatch, id]);
+
+  const onEditHandler = () => {
+    dispatch(__editHot(Hots.id));
+    navigate("edit/:id", { replace: true });
+
+    // window.location.replace("/");
+  };
+
+  if (isLoading) {
+    return <div>로딩 중....</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
-    <STDetailBoard key={posts.id}>
-      {/* <img
-        src="https://pixabay.com/get/g0c69efb0c96d89bdefe09a3a95a65fb9d4f25604cb878f6a0de8b02fe9c2d889c129b43d076caf6bd8060edf286b85482bcde45fd0048e372a72243f359e19c40bd7b8737024890bc190fc10b1d6d55f_1920.jpg"
-        alt="img"
-      /> */}
-      {/* {posts?.map((post) => {
-        if (post.id === posts.id) { */}
-      {/* return ( */}
-      <div>
+    <div>
+      <STDetailBoard>
         <div className="detail-title">
-          <p>{posts.title}</p>
-          <p>{posts.fire}</p>
+          <p key={Hots.id} title={Hots.title}>
+            {Hots.title}
+          </p>
+          <p key={Hots.id} fire={Hots.fire}>
+            {Hots.fire}
+          </p>
         </div>
-        <div>{posts.img}</div>
-        <p className="detail-text">{posts.content}</p>
+
+        <p className="detail-text" key={Hots.id} content={Hots.content}>
+          {Hots.content}
+        </p>
         <STDetailBtn>
+          <Btn
+            label="수정"
+            className="btn detail-edit-btn"
+            onClick={onEditHandler}
+          />
           <Btn
             label="삭제"
             className="btn detail-edit-btn"
-            onClick={() => {}}
+            onClick={() => onDelHandler(hot.id)}
           />
-          <Btn className="btn detail-del-btn" />
         </STDetailBtn>
-      </div>
-      {/* ); */}
-      {/* }
-      })} */}
-    </STDetailBoard>
+      </STDetailBoard>
+      <CommentList postId={id} />
+    </div>
   );
 }
 
-export default Detail;
+export default DetailBoard;
 
 const STDetailBoard = styled.div`
   display: flex;
@@ -76,14 +101,8 @@ const STDetailBoard = styled.div`
   height: 60%;
   width: 80%;
   padding: 15px;
-  /* img {
-    width: 80%;
-    height: 300px;
-    object-fit: cover;
-  } */
   .detail-title {
     width: 80%;
-    /* min-width: 400px; */
     height: 80px;
     display: flex;
     justify-content: space-between;

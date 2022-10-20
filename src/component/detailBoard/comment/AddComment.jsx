@@ -1,77 +1,72 @@
 import React, { useState, useEffect } from "react";
 import Btn from "../../btn/Btn";
-import nextId from "react-id-generator";
-import { useDispatch } from "react-redux";
 import Fire from "../../fire/Fire";
 import styled from "styled-components";
-import { axiosHot } from "../../../apis/hotInstance";
-import { addHot } from "../../../redux/modules/hotSlice";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  __postCom,
+  __editCom,
+  __getCom,
+} from "../../../redux/modules/commentSlice";
 
-function AddComment(onDeleteHandler) {
-  const id = nextId();
+function AddComment({ postId, comment, fire }) {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const initialState = {
     id: 0,
-    content: "",
+    comment: "",
     fire: "",
-    isDone: false,
+    postId: postId,
   };
-  const [inputs, setInputs] = useState(initialState);
-  const [comments, setComments] = useState(null);
+  const [comments, setComment] = useState(initialState);
+  const [editC, setEditC] = useState(false);
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
+    setComment({ ...comments, [name]: value });
   };
-  const fetchAll = async () => {
-    const { data } = await axiosHot.get("comments");
-    setComments(data);
-  };
-  const onSubmitHandler = (inputs) => {
-    axios.post("http://localhost:3001/comments", inputs);
-    if (inputs.content === "") {
+
+  const onSubmitInfoHandler = (e) => {
+    e.preventDefault();
+    if (comments.comment === "") {
       alert("내용을 넣어주세요");
       return;
     }
-
-    dispatch(
-      addHot({
-        ...inputs,
-        id,
-      })
-    );
-    setInputs("");
+    dispatch(__postCom({ ...comments }));
+    setComment(initialState);
+    return;
   };
-  useEffect(() => [fetchAll()], []);
 
-  console.log(comments);
-  return (
-    <STAddComment
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmitHandler(inputs);
-      }}
-    >
-      <form>
+  const onEditHandler = () => {
+    dispatch(__editCom(id));
+    //   setEditC(false);
+    //   dispatch(__getCom(false));
+    // };
+
+    // useEffect(() => {
+    //   setComment(comment, fire);
+    // }, [comment, fire]);
+    return (
+      <STAddComment onSubmit={onSubmitInfoHandler}>
         <InputStyle
           type="text"
-          name="content"
+          name="comment"
           key="id"
-          value={inputs.content || ""}
+          value={comments.comment}
           onChange={onChangeHandler}
         />
         <div>
-          <Fire changeFire={onChangeHandler} />
+          <Fire key="id" changeFire={onChangeHandler} />
           <Btn label="기록" onClick={() => {}} />
         </div>
-      </form>
-    </STAddComment>
-  );
+      </STAddComment>
+    );
+  };
 }
 
 export default AddComment;
 
-const STAddComment = styled.div`
+const STAddComment = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;

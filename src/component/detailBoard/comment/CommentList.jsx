@@ -1,40 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { axiosHot } from "../../../apis/hotInstance";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import AddComment from "./AddComment";
-import EditComment from "../editDetail/EditDetail";
+import Btn from "../../btn/Btn";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import DeleteComment from "./DeleteComment";
+import {
+  __deleteCom,
+  __getCom,
+  __editCom,
+} from "../../../redux/modules/commentSlice";
 
-function CommentList() {
-  const [comments, setComments] = useState(null);
-  const fetchAll = async () => {
-    const { data } = await axiosHot.get("comments");
-    setComments(data);
+function CommentList({ postId }) {
+  const dispatch = useDispatch();
+  const comments = useSelector((state) => state.comments.comments);
+  const { isLoading, error } = useSelector((state) => state.comments);
+
+  const initialState = {
+    id: 0,
+    comment: "",
+    fire: "",
+    postId: 0,
+    isDone: false,
   };
 
-  useEffect(() => [fetchAll()], []);
+  const [comM, setComment] = useState(initialState);
+  const [editC, setEditC] = useState(false);
+  const { id } = useParams();
+  // const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(__getCom(postId));
+  }, [dispatch, postId]);
+
+  const onDelHandler = (id) => {
+    dispatch(__deleteCom(id));
+    // navigate("/", { replace: true });
+  };
+
+  if (isLoading) {
+    return <div>로딩 중....</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <STCommentList>
-      <AddComment />
+      <AddComment postId={postId} />
       <div className="comment-list">
         {comments?.map((com) => {
-          if (!com.isDone) {
-            return (
-              <div key={com.id}>
-                <div className="comment-text">
-                  <p>{com.content}</p>
-                  <p>{com.fire}</p>
-                </div>
-
-                <div className="comment-btn">
-                  <DeleteComment key={com.id} com={com} />
-                  <EditComment key={com.id} com={com} />
-                </div>
+          return (
+            <div key={com.id}>
+              <div className="comment-text">
+                <p key={com.id} comment={com.comment}>
+                  {com.comment}
+                </p>
+                <p key={com.id} fire={com.fire}>
+                  {com.fire}
+                </p>
               </div>
-            );
-          } else {
-            return null;
-          }
+
+              <div className="comment-btn">
+                <Btn
+                  label="삭제"
+                  type="button"
+                  onClick={() => onDelHandler(com.id)}
+                />
+                <Btn label="수정" onClick={() => {}} />
+              </div>
+            </div>
+          );
         })}
       </div>
     </STCommentList>
@@ -53,25 +91,25 @@ const STCommentList = styled.div`
   padding: 30px;
   .comment-list {
     width: 80%;
-    height: 350px;
+    height: 300px;
     display: flex;
+    /* justify-content: space-between; */
+    /* align-items: center; */
     flex-direction: column;
-    align-items: left;
     font-size: 15px;
     border: 3px solid tomato;
     padding: 5px 10px;
     div {
+      width: 100%;
       background-color: lightgray;
-      width: auto;
-      margin: 5px;
+      margin-bottom: 5px;
       display: flex;
-      justify-content: space-between;
+      /* justify-content: space-between; */
       align-items: center;
     }
     .comment-text {
-      width: 65%;
+      width: 1700px;
       height: auto;
-      margin-left: 10px;
     }
   }
 `;

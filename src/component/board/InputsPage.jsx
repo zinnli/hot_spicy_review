@@ -1,99 +1,79 @@
 import React, { useState, useEffect } from "react";
 import Btn from "../btn/Btn";
-import nextId from "react-id-generator";
-import { useDispatch } from "react-redux";
+//import nextId from "react-id-generator";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import Fire from "../fire/Fire";
 import styled from "styled-components";
-import { addDetail } from "../../redux/modules/hotSlice";
-import { axiosHot } from "../../apis/hotInstance";
-import axios from "axios";
+import {
+  __postHot,
+  __editHot,
+  __detailHot,
+} from "../../redux/modules/hotSlice";
 
 const InputsPage = () => {
-  const id = nextId();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const initialState = {
     id: 0,
     title: "",
-    text: "",
+    content: "",
     fire: "",
-    img: "",
-    isDone: false,
   };
-  // const dropdown = [
-  //   { id: null, value: "선택해주세요 " },
-  //   { id: "0001", value: "🔥" },
-  //   { id: "0002", value: "🔥🔥" },
-  //   { id: "0003", value: "🔥🔥🔥" },
-  //   { id: "0004", value: "🔥🔥🔥🔥" },
-  //   { id: "0005", value: "🔥🔥🔥🔥🔥" },
-  // ];
+  const [hot, setHot] = useState(initialState);
+  const newHot = useSelector((state) => state.hot.detail);
+  console.log(newHot);
+  const { id } = useParams();
+  console.log("확인", id);
 
-  // const [selectDropValue, setSelectDropValue] = useState(["선택해주세요"]);
-
-  // const dropdownHandeler = (e) => {
-  //   const { value } = e.target;
-  //   setSelectDropValue(dropdown.filter((drop) => drop.value === value)[0]);
-  // };
-
-  const [inputs, setInputs] = useState(initialState);
-  const [posts, setPosts] = useState(null);
-  const fetchAll = async () => {
-    const { data } = await axiosHot.get("posts");
-    setPosts(data);
-  };
-  const onSubmitHandler = (inputs) => {
-    axios.post("http://localhost:3001/posts", inputs);
-    if (inputs.title === "" || inputs.text === "") {
-      alert("내용을 넣어주세요");
-      return;
+  useEffect(() => {
+    if (id) {
+      // 글쓰기와 수정하기를 구별하기 위해 사용. 수정하기는 아이디 값이 있는 것만 수정함..
+      if (hot.id !== 0) {
+        return;
+      } // 무한렌더링 방지를 위해  입력
+      dispatch(__detailHot(id));
+      console.log("테스트");
+      setHot(newHot);
     }
-
-    dispatch(
-      addDetail({
-        ...inputs,
-        id,
-      })
-    );
-    setInputs("");
-  };
-  useEffect(() => [fetchAll()], []);
+  }, [dispatch, id, newHot, hot.id]);
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
+    setHot({ ...hot, [name]: value });
   };
 
-  // const onSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   if (inputs.title === "" || inputs.text === "") {
-  //     alert("내용을 넣어주세요");
-  //     return;
-  //   }
+  const onSubmitInfoHandler = (e) => {
+    e.preventDefault();
+    if (hot.title.trim() === "" || hot.content.trim() === "") {
+      alert("내용을 넣어주세요");
+      return;
+    }
+    if (id) {
+      dispatch(__editHot(hot));
+      alert("수정끝!");
+      navigate(`hot/${id}`);
+      return;
+    }
+    dispatch(__postHot({ ...hot }));
+    setHot(initialState);
+    window.location.replace("/");
+  };
 
-  //   dispatch(
-  //     addDetail({
-  //       ...inputs,
-  //       id,
-  //     })
-  //   );
-  //   setInputs("");
-  // };
-  console.log(posts);
+  // useEffect(() => {
+  //      dispatch(__postHot());
+  // }, [dispatch]);
+
   return (
-    <PageContainer
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmitHandler(inputs);
-      }}
-    >
+    <PageContainer onSubmit={onSubmitInfoHandler}>
       <InputsContainer>
         <InputBox>
           <div>가게명</div>
           <InputType
+            key="id"
             type="text"
             name="title"
-            value={inputs.title || ""}
-            key="id"
+            value={hot.title}
             onChange={onChangeHandler}
           ></InputType>
         </InputBox>
@@ -101,29 +81,15 @@ const InputsPage = () => {
           <div>상세내용</div>
           <TextareaType
             type="text"
-            name="text"
-            value={inputs.text || ""}
-            // key="id"
+            name="content"
+            value={hot.content}
+            key="id"
             onChange={onChangeHandler}
           ></TextareaType>
         </InputBox>
         <InputBox>
           <div>불맛</div>
           <Fire changeFire={onChangeHandler} />
-          {/* <select onChange={dropdownHandeler}>
-            {dropdown.map((drop) => {
-              return <option key={drop.id}>{drop.value}</option>;
-            })}
-          </select> */}
-        </InputBox>
-        <InputBox>
-          사진
-          <input
-            type="file"
-            accept="image/*"
-            name="img"
-            onChange={onChangeHandler}
-          ></input>
         </InputBox>
       </InputsContainer>
       <ButtonContainer>
