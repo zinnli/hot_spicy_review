@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import Btn from "../btn/Btn";
 import styled from "styled-components";
 import CommentList from "./comment/CommentList";
-import {
-     __deleteHot,
-     __editHot,
-     __detailHot,
-} from "../../redux/modules/hotSlice";
+import { __deleteHot, __detailHot } from "../../redux/modules/hotSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,14 +12,6 @@ function DetailBoard() {
      const Hots = useSelector((state) => state.hot.detail);
      //detail 쓰는 이유
      const comments = useSelector((state) => state.comments.comments);
-
-     const initialState = {
-          id: 0,
-          title: "",
-          content: "",
-          fire: "",
-     };
-     const [hot, setHot] = useState(initialState);
 
      const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();

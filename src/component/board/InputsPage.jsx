@@ -9,7 +9,7 @@ import {
      __detailHot,
      __editHot,
 } from "../../redux/modules/hotSlice";
-import { navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const InputsPage = () => {
      //  const id = nextId();
@@ -128,6 +128,7 @@ const InputType = styled.input`
 const TextareaType = styled.textarea`
      width: 600px;
      height: 300px;
+     padding: 15px;
 `;
 
 const ButtonContainer = styled.div`
