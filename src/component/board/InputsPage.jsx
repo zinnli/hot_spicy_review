@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Btn from "../btn/Btn";
 //import nextId from "react-id-generator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Fire from "../fire/Fire";
 import styled from "styled-components";
-import { __postHot } from "../../redux/modules/hotSlice";
+import {
+     __postHot,
+     __detailHot,
+     __editHot,
+} from "../../redux/modules/hotSlice";
+import { navigate, useNavigate, useParams } from "react-router-dom";
 
 const InputsPage = () => {
      //  const id = nextId();
@@ -16,6 +21,25 @@ const InputsPage = () => {
           fire: "",
      };
      const [hot, setHot] = useState(initialState);
+     const newHot = useSelector((state) => state.hot.detail);
+     const { id } = useParams();
+     const navigate = useNavigate();
+     //params가 있을 때만 getdetail을 가져오기(hot 을 setstate)
+     //console.log(id);
+
+     useEffect(() => {
+          if (id) {
+               //글쓰기와 수정하기를 구분하기 위해 사용
+               if (hot.id !== 0) {
+                    return;
+               } // 무한 렌더링 방지를 위해 입력
+               dispatch(__detailHot(id));
+               //console.log("확인");
+               setHot(newHot);
+          }
+     }, [dispatch, id, newHot, hot.id]);
+
+     //console.log(newHot);
 
      const onChangeHandler = (e) => {
           const { name, value } = e.target;
@@ -28,7 +52,13 @@ const InputsPage = () => {
                alert("내용을 넣어주세요");
                return;
           }
-          dispatch(__postHot({ ...hot }));
+          if (id) {
+               dispatch(__editHot(hot));
+               alert("수정끝");
+               navigate(`/hot/${id}`);
+               return;
+          }
+          dispatch(__postHot(hot));
           window.location.replace("/");
      };
 

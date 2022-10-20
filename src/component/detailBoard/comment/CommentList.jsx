@@ -4,7 +4,7 @@ import Btn from "../../btn/Btn";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../../../api/axiosInstance";
+//import { axiosInstance } from "../../../api/axiosInstance";
 import { __deleteCom, __getCom } from "../../../redux/modules/commentSlice";
 
 function CommentList({ postId }) {
@@ -18,6 +18,8 @@ function CommentList({ postId }) {
 
      const onDelHandler = (id) => {
           dispatch(__deleteCom(id));
+          alert("삭제완료");
+          dispatch(__getCom(postId));
      };
 
      if (isLoading) {

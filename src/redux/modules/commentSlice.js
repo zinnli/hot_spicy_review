@@ -25,8 +25,7 @@ export const __getCom = createAsyncThunk(
                const filterCom = data.filter(
                     (state) => state.postId === payload
                );
-               console.log(data); // 이구문에서 오류나면 error로 넘어감
-               console.log(filterCom);
+               //console.log(filterCom);
                return thunkAPI.fulfillWithValue(filterCom);
           } catch (error) {
                return thunkAPI.rejectWithValue(error);
@@ -37,9 +36,7 @@ export const __getCom = createAsyncThunk(
 export const __postCom = createAsyncThunk(
      "comments/postCom",
      async (payload, thunkAPI) => {
-          console.log("확인", payload);
           try {
-               console.log(payload);
                const { data } = await axiosInstance.post("/comments", payload);
                return thunkAPI.fulfillWithValue(data);
           } catch (error) {
@@ -52,7 +49,6 @@ export const __deleteCom = createAsyncThunk(
      "comments/deleteCom",
      async (payload, thunkAPI) => {
           try {
-               console.log("테스트:", payload);
                const data = await axiosInstance.delete(`/comments/${payload}`);
                return thunkAPI.fulfillWithValue(data.data);
           } catch (error) {

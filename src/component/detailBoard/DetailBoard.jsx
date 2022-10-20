@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
-
 import Btn from "../btn/Btn";
 import styled from "styled-components";
 import CommentList from "./comment/CommentList";
@@ -16,6 +14,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function DetailBoard() {
      const Hots = useSelector((state) => state.hot.detail);
+     //detail 쓰는 이유
+     const comments = useSelector((state) => state.comments.comments);
+
      const initialState = {
           id: 0,
           title: "",
@@ -27,12 +28,12 @@ function DetailBoard() {
      const { isLoading, error } = useSelector((state) => state.hot);
      const { id } = useParams();
      const navigate = useNavigate();
-     //console.log(Hots);
-
+     console.log(Hots);
+     console.log(comments);
      const dispatch = useDispatch();
 
      const onDelHandler = () => {
-          dispatch(__deleteHot(Hots.id));
+          dispatch(__deleteHot(id));
           //console.log(Hots.id);
           navigate("/", { replace: true });
           // useNavigate - replace 사용하기-- 오류처리 페이지로 이동
@@ -44,8 +45,8 @@ function DetailBoard() {
      }, [dispatch, id]);
 
      const onEditHandler = () => {
-          dispatch(__editHot(Hots));
-
+          //dispatch(__editHot(id));
+          navigate(`/hot/edit/${id}`);
           // window.location.replace("/");
      };
 
@@ -69,15 +70,14 @@ function DetailBoard() {
                          <Btn
                               label="수정"
                               className="btn detail-edit-btn"
-                              onClick={() => {
-                                   onEditHandler();
-                              }}
+                              onClick={onEditHandler}
                          />
                          <Btn
                               label="삭제"
                               className="btn detail-edit-btn"
-                              onClick={() => onDelHandler(hot.id)}
+                              onClick={onDelHandler}
                          />
+                         {/* arrow fun 쓸 때 -- 사용법은 많은데.,,!!! 주로~!!! map돌릴때 */}
                     </STDetailBtn>
                </STDetailBoard>
                <CommentList postId={id} />
