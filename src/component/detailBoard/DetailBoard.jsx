@@ -11,9 +11,8 @@ import {
      __detailHot,
 } from "../../redux/modules/hotSlice";
 
-import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function DetailBoard() {
      const Hots = useSelector((state) => state.hot.detail);

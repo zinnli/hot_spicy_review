@@ -63,10 +63,7 @@ export const __editHot = createAsyncThunk(
      "hot/editHot",
      async (id, payload, thunkAPI) => {
           try {
-               const { data } = await axiosInstance.patch(
-                    `/hot/${id}`,
-                    payload
-               );
+               const { data } = await axiosInstance.patch(`/edit/${payload}`);
                return thunkAPI.fulfillWithValue(data);
           } catch (error) {
                return thunkAPI.rejectWithValue(error);

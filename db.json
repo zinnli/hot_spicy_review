@@ -37,5 +37,24 @@
       "fire": "🔥🔥🔥🔥"
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "id": 3,
+      "comment": "wqe",
+      "fire": "🔥",
+      "postId": "6"
+    },
+    {
+      "id": 5,
+      "comment": "ㅁㅁ",
+      "fire": "🔥🔥",
+      "postId": "6"
+    },
+    {
+      "id": 7,
+      "comment": "ㅁㅁ",
+      "fire": "🔥🔥",
+      "postId": "6"
+    }
+  ]
 }

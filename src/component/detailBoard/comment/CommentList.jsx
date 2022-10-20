@@ -1,4 +1,4 @@
-import React, { useState, useParams } from "react";
+import React, { useState } from "react";
 import AddComment from "./AddComment";
 import Btn from "../../btn/Btn";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +17,7 @@ function CommentList({ postId }) {
      }, [dispatch, postId]);
 
      const onDelHandler = (id) => {
-          dispatch(__deleteCom("comments", `${id}`));
-          //     window.location.reload();
+          dispatch(__deleteCom(id));
      };
 
      if (isLoading) {
@@ -34,33 +33,29 @@ function CommentList({ postId }) {
                <AddComment postId={postId} />
                <div className="comment-list">
                     {comments?.map((com) => {
-                         if (!com.isDone) {
-                              return (
-                                   <div key={com.id}>
-                                        <div className="comment-text">
-                                             <p>{com.comment}</p>
-                                             <p>{com.fire}</p>
-                                        </div>
-
-                                        <div className="comment-btn">
-                                             <Btn
-                                                  label="삭제"
-                                                  type="button"
-                                                  onClick={() =>
-                                                       onDelHandler(com.id)
-                                                  }
-                                             />
-                                             <Btn
-                                                  label="수정"
-                                                  key={com.id}
-                                                  com={com}
-                                             />
-                                        </div>
+                         return (
+                              <div key={com.id}>
+                                   <div className="comment-text">
+                                        <p>{com.comment}</p>
+                                        <p>{com.fire}</p>
                                    </div>
-                              );
-                         } else {
-                              return null;
-                         }
+
+                                   <div className="comment-btn">
+                                        <Btn
+                                             label="삭제"
+                                             type="button"
+                                             onClick={() =>
+                                                  onDelHandler(com.id)
+                                             }
+                                        />
+                                        <Btn
+                                             label="수정"
+                                             key={com.id}
+                                             com={com}
+                                        />
+                                   </div>
+                              </div>
+                         );
                     })}
                </div>
           </STCommentList>
